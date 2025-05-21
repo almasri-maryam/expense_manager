@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import User, EmailVerification
 
+
 from .utils import generate_code, send_verification_email
 
 
@@ -29,8 +30,10 @@ class VerifyEmailSerializer(serializers.Serializer):
             user.is_active = True
             user.save()
         except Exception:
-            raise serializers.ValidationError("رمز غير صالح")
+            raise serializers.ValidationError("Invalid code")
         return data
+
+
 
 
 class AdminUserSerializer(serializers.ModelSerializer):

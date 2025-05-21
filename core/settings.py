@@ -15,7 +15,11 @@ SECRET_KEY = "django-insecure-+))^-2#br9iovdszula2#5o78^)r#8@2%8n*xm-0mr2rzc&or0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    '0.0.0.0',
+    '192.168.1.117'
+     ]
 
 
 # Application definition
@@ -30,10 +34,9 @@ INSTALLED_APPS = [
     
     'rest_framework_simplejwt.token_blacklist',
     'rest_framework',
-    'accounts',
+    'expense_app',
+    'expense_app.accounts',
     'corsheaders'
-
-
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -138,6 +141,9 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
+
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+    
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),  
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     
     'AUTH_HEADER_TYPES': ('Bearer',),
@@ -158,3 +164,4 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     
 }
+

@@ -1,15 +1,14 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
 import random
-
 from django.utils import timezone
 
 class UserManager(BaseUserManager):
     def create_user(self, email, username, password=None, **extra_fields):
         if not email:
-            raise ValueError("البريد الإلكتروني مطلوب")
+            raise ValueError("Email is required")
         if not username:
-            raise ValueError("اسم المستخدم مطلوب")
+            raise ValueError("Username is required")
         email = self.normalize_email(email)
         user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
@@ -22,9 +21,9 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_active', True)  
 
         if extra_fields.get('is_staff') is not True:
-            raise ValueError('يجب أن يكون is_staff=True للسوبر يوزر')
+            raise ValueError('Superuser must have is_staff=True')
         if extra_fields.get('is_superuser') is not True:
-            raise ValueError('يجب أن يكون is_superuser=True للسوبر يوزر')
+            raise ValueError('Superuser must have is_superuser=True')
 
         return self.create_user(email, username, password, **extra_fields)
 
