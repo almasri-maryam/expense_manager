@@ -27,6 +27,8 @@ def login_user(email, password, is_admin=False):
         raise AuthenticationFailed("You are not authorized as admin.")
     if not is_admin and user.is_staff:
         raise AuthenticationFailed("You are not authorized as a regular user.")
+    if not user.is_active:
+        raise AuthenticationFailed("Account is not activated. Please verify your email.")
 
     refresh = RefreshToken.for_user(user)
     return {

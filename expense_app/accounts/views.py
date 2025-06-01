@@ -1,4 +1,3 @@
-# views.py
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -112,3 +111,4 @@ class AdminDeleteUserView(generics.DestroyAPIView):
         if user.is_staff:
             return Response({"error": "Admin users cannot be deleted."}, status=status.HTTP_403_FORBIDDEN)
         return super().destroy(request, *args, **kwargs)
+

@@ -30,13 +30,16 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
-    username = models.CharField(max_length=150, unique=True)  
+    username = models.CharField(max_length=150, unique=True) 
+    cash_currency = models.CharField(max_length=150  , default='USD')
     is_active = models.BooleanField(default=False)   
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)   
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']      
+    REQUIRED_FIELDS = ['username' , 'password' , 'cash_currency']
+
+
 
     objects = UserManager()
 
@@ -49,6 +52,3 @@ class EmailVerification(models.Model):
     code = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)
 
-
-def generate_code():
-    return str(random.randint(100000, 999999))

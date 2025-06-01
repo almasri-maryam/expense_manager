@@ -1,14 +1,12 @@
 from rest_framework import serializers
 from .models import User, EmailVerification
-
-
 from .utils import generate_code, send_verification_email
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email', 'cash_currency' ,'password' , 'date_joined']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -56,4 +54,5 @@ class AdminCreateUserSerializer(serializers.ModelSerializer):
         user.is_staff = False  
         user.save()
         return user
+
 

@@ -16,9 +16,10 @@ SECRET_KEY = "django-insecure-+))^-2#br9iovdszula2#5o78^)r#8@2%8n*xm-0mr2rzc&or0
 DEBUG = True
 
 ALLOWED_HOSTS = [
+     '172.20.10.8' ,
+    '172.20.10.5',
     '127.0.0.1',
     '0.0.0.0',
-    '192.168.1.117'
      ]
 
 
@@ -34,9 +35,15 @@ INSTALLED_APPS = [
     
     'rest_framework_simplejwt.token_blacklist',
     'rest_framework',
+
     'expense_app',
     'expense_app.accounts',
-    'corsheaders'
+    'expense_app.expenses',
+
+    'corsheaders',
+
+    'django_celery_beat',
+    
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -147,6 +154,8 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),  
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     
     'AUTH_HEADER_TYPES': ('Bearer',),
+    'BLACKLIST_AFTER_ROTATION': True,
+
 }
 
 
@@ -158,10 +167,3 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'maryamalmasriii686@gmail.com'           
 EMAIL_HOST_PASSWORD ="hkrv xcou lwog iqfp"    
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-
-SIMPLE_JWT = {
-    'BLACKLIST_AFTER_ROTATION': True,
-    
-}
-
