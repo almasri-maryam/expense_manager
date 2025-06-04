@@ -1,5 +1,5 @@
 from rest_framework.exceptions import ValidationError
-from .models import Category
+from ..models import Category
 
 class CategoryService:
     def __init__(self, user):

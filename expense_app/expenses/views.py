@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Category, Transaction
 from .serializers import CategorySerializer, TransactionSerializer
 from .services.services_category import CategoryService
-from .services.services_transactions import TransactionService
+from .services.services_transiction import TransactionService
 
 class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer

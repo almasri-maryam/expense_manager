@@ -1,5 +1,5 @@
 from rest_framework.exceptions import ValidationError
-from .models import Transaction
+from ..models import Transaction
 from django.db.models import Sum
 from dateutil.relativedelta import relativedelta
 
