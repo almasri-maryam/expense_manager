@@ -1,34 +1,27 @@
 from rest_framework import serializers
-from .models import Income, Expense, IncomeCategory, ExpenseCategory
+from .models import Category, Transaction
 
-class IncomeCategorySerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = IncomeCategory
-        fields = ['id', 'name']
+        model = Category
+        fields = ['id', 'name', 'type']
 
     def validate_name(self, value):
         user = self.context['request'].user
-        if IncomeCategory.objects.filter(user=user, name__iexact=value).exists():
-            raise serializers.ValidationError("This category already exists. Please choose a different name.")
+        category_type = self.initial_data.get('type')
+        if Category.objects.filter(user=user, name__iexact=value, type=category_type).exists():
+            raise serializers.ValidationError("This category already exists for this type. Please choose a different name.")
         return value
 
-class ExpenseCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ExpenseCategory
-        fields = ['id', 'name', 'expense_limit']
 
-    def validate_name(self, value):
-        user = self.context['request'].user
-        if ExpenseCategory.objects.filter(user=user, name__iexact=value).exists():
-            raise serializers.ValidationError("This category already exists. Please choose a different name.")
-        return value
-
-class IncomeSerializer(serializers.ModelSerializer):
+class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Income
-        fields = ['id', 'amount', 'date', 'category', 'description']
+        model = Transaction
+        fields = ['id', 'amount', 'date', 'category', 'transaction_type', 'description', 'is_recurring']
 
-class ExpenseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Expense
-        fields = ['id', 'amount', 'date', 'category', 'is_recurring', 'description']
+    def validate(self, data):
+        category = data.get('category')
+        transaction_type = data.get('transaction_type')
+        if category.type != transaction_type:
+            raise serializers.ValidationError("Transaction type must match the category type.")
+        return data
