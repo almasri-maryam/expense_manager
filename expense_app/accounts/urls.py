@@ -5,7 +5,6 @@ from .views import (
     ChangePasswordView, UserProfileView, DeleteAccountView,
     AdminUserListView, AdminCreateUserView, AdminDeleteUserView
 )
-
 from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
@@ -22,5 +21,5 @@ urlpatterns = [
     path('admin/login/', AdminLoginView.as_view(), name='admin-login'),
     path('admin/users/', AdminUserListView.as_view(), name='admin-user-list'),
     path('admin/users/create/', AdminCreateUserView.as_view(), name='admin-user-create'),
-    path('admin/users/<int:pk>/delete/', AdminDeleteUserView.as_view(), name='admin-user-delete'),
+    path('admin/users/<int:pk>/delete/', AdminDeleteUserView.as_view(), name='admin-user-delete'),    
 ]

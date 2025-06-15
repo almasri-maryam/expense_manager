@@ -2,6 +2,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions, generics
+from rest_framework.exceptions import ValidationError
 from .serializers import RegisterSerializer, VerifyEmailSerializer, AdminUserSerializer, AdminCreateUserSerializer
 from .models import User
 from .services import (
@@ -9,16 +10,7 @@ from .services import (
     change_password, get_user_profile, delete_user_account
 )
 
-
-class IsAdmin(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.is_staff
-
-
-class IsRegularUserOnly(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and not request.user.is_staff
-
+from .permissions import IsAdmin, IsRegularUserOnly
 
 class RegisterView(APIView):
     def post(self, request):
@@ -61,16 +53,33 @@ class LogoutView(APIView):
 
 
 class ChangePasswordView(APIView):
-    permission_classes = [IsRegularUserOnly]
+    permission_classes = [IsRegularUserOnly]  
 
     def post(self, request):
-        result = change_password(
-            user=request.user,
-            old_password=request.data.get("old_password"),
-            new_password=request.data.get("new_password")
-        )
-        return Response(result)
+        old_password = request.data.get("old_password")
+        new_password = request.data.get("new_password")
+        new_password_confirm = request.data.get("new_password_confirm")
 
+        if not old_password or not new_password or not new_password_confirm:
+            return Response(
+                {"error": "Old password, new password and confirmation are required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if new_password != new_password_confirm:
+            return Response(
+                {"error": "New passwords do not match."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            result = change_password(
+                user=request.user,
+                old_password=old_password,
+                new_password=new_password
+            )
+            return Response(result, status=status.HTTP_200_OK)
+        except ValidationError as e:
+            return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
 
 class UserProfileView(APIView):
     permission_classes = [IsRegularUserOnly]

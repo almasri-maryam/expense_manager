@@ -167,3 +167,18 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'maryamalmasriii686@gmail.com'           
 EMAIL_HOST_PASSWORD ="hkrv xcou lwog iqfp"    
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'generate-recurring-transactions-monthly': {
+        'task': 'expense_app.expenses.services.transactions.generate_monthly_recurring_transactions',
+        'schedule': crontab(day_of_month=1, hour=0, minute=0),  
+    },
+}

@@ -6,16 +6,26 @@ from .utils import generate_code, send_verification_email
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'cash_currency' ,'password' , 'date_joined']
+        fields = ['username', 'email', 'cash_currency', 'password', 'date_joined']
         extra_kwargs = {'password': {'write_only': True}}
 
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        code = generate_code()
-        EmailVerification.objects.create(user=user, code=code)
-        send_verification_email(user.email, code)
-        return user
+    def validate(self, data):
+        if not data.get('cash_currency') and not data.get('is_staff', False):
+            raise serializers.ValidationError({"cash_currency": "Cash currency is required for regular users."})
+        return data
 
+    def create(self, validated_data):
+        is_staff = validated_data.get('is_staff', False)
+
+        if is_staff:
+            validated_data.pop('cash_currency', None)
+
+        user = User.objects.create_user(**validated_data)
+        if not user.is_staff:
+            code = generate_code()
+            EmailVerification.objects.create(user=user, code=code)
+            send_verification_email(user.email, code)
+        return user
 
 class VerifyEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()

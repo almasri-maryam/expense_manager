@@ -15,8 +15,14 @@ class Category(models.Model):
     type = models.CharField(max_length=7, choices=CATEGORY_TYPES)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    expense_limit = models.DecimalField(
+        max_digits=12, decimal_places=2, null=True, blank=True
+    )  
+
+
     def __str__(self):
         return f"{self.name} ({self.type})"
+    
 
 
 class Transaction(models.Model):

@@ -31,13 +31,13 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=150, unique=True) 
-    cash_currency = models.CharField(max_length=150  , default='USD')
+    cash_currency = models.CharField(max_length=150, blank=True, null=True) 
     is_active = models.BooleanField(default=False)   
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)   
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username' , 'password' , 'cash_currency']
+    REQUIRED_FIELDS = ['username']
 
 
 

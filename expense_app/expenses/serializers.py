@@ -4,7 +4,7 @@ from .models import Category, Transaction
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'type']
+        fields = ['id', 'name', 'type' , 'expense_limit']
 
     def validate_name(self, value):
         user = self.context['request'].user
