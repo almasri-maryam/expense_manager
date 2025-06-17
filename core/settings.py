@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'expense_app',
     'expense_app.accounts',
     'expense_app.expenses',
+    'expense_app.FinancialGoals' ,
 
     'corsheaders',
 

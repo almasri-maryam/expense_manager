@@ -19,9 +19,9 @@ class TransactionSerializer(serializers.ModelSerializer):
         model = Transaction
         fields = ['id', 'amount', 'date', 'category', 'transaction_type', 'description', 'is_recurring']
 
-    def validate(self, data):
-        category = data.get('category')
-        transaction_type = data.get('transaction_type')
-        if category.type != transaction_type:
-            raise serializers.ValidationError("Transaction type must match the category type.")
-        return data
+    #def validate(self, data):
+        #category = data.get('category')
+       # transaction_type = data.get('transaction_type')
+       # if category.type != transaction_type:
+        #    raise serializers.ValidationError("Transaction type must match the category type.")
+      #  return data
